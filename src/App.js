@@ -1,4 +1,4 @@
-import data from './data/themes.json';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function Theme(props) {
@@ -64,6 +64,22 @@ function Theme(props) {
 }
 
 function App() {
+  const url = 'https://raw.githubusercontent.com/jdhmtl/theme-display/main/src/data/themes.json';
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch(url, { mode: 'cors' })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(data => {
+        setData(data);
+      });
+  }, []);
+
   return (
     <>
       <div className="themes">
