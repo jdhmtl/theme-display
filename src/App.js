@@ -76,9 +76,36 @@ function App() {
         }
       })
       .then(data => {
-        setData(data);
+        const themes = [];
+        data.forEach(datum => {
+          const light = lightBackground(datum);
+          const theme = {
+            ...datum,
+            'light': light
+          };
+          themes.push(theme);
+        });
+        setData(themes);
       });
   }, []);
+
+  function lightBackground(theme) {
+    const hex = theme.colors.background;
+    const pairs = hex.match(/[a-zA-Z0-9]{2}/g);
+    const rgb = [
+      parseInt(pairs[0], 16),
+      parseInt(pairs[1], 16),
+      parseInt(pairs[2], 16)
+    ];
+    const [r, g, b] = [...rgb];
+    const hsp = Math.sqrt(
+      0.299 * (r * r) +
+      0.587 * (g * g) +
+      0.114 * (b * b)
+    );
+
+    return hsp > 127.5;
+  }
 
   return (
     <>
